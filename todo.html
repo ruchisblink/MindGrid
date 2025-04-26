@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            background-image: radial-gradient(#000 1px, transparent 1px), radial-gradient(#000 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            padding: 30px;
+        }
+
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            font-family: 'Courier New', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #000;
+            position: relative;
+        }
+
+        th {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .checked-task {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 10px solid black;
+            position: absolute;
+            right: 25px;
+            top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: black;
+            text-align: center;
+        }
+
+        .task-input {
+            width: 80%;
+            border: none;
+            outline: none;
+            font-size: 1em;
+            padding: 5px;
+        }
+
+        .date-input {
+            border: none;
+            outline: none;
+            font-size: 1em;
+        }
+
+        .editable-task {
+            border-bottom: 1px dashed #000;
+            width: 100%;
+        }
+
+        .task-row {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .delete-btn {
+            display: none;
+            position: absolute;
+            right: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-btn img {
+            width: 25px;
+            height: 25px;
+        }
+
+        .task-row:hover .delete-btn {
+            display: inline-block;
+        }
+
+        .task-row:hover {
+            background-color: #f2f2f2;
+        }
+
+        #filter-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        #dateFilter {
+            margin-right: 15px;
+        }
+
+        .add-task-button {
+            background-color: black;
+            color: white;
+            padding: 5px 15px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0;
+        }
+
+        td {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 contenteditable="true">To Do List</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>TASK</th>
+                    <th>DATE</th>
+                </tr>
+            </thead>
+            <tbody id="taskList">
+                <!-- Default tasks -->
+                <tr class="task-row">
+                    <td>
+                        <input type="checkbox" class="checkbox" onchange="updateProgress(this)">
+                        <span class="editable-task" contenteditable="true" onkeydown="checkEnter(event)">Finish homework</span>
+                    </td>
+                    <td>
+                        <input type="date" class="date-input" value="2024-10-18" onchange="updateDateFilter()">
+                        <button class="delete-btn" onclick="deleteTask(this)"><img src="delete.png" alt="Delete"></button>
+                    </td>
+                </tr>
+                <tr class="task-row">
+                    <td>
+                        <input type="checkbox" class="checkbox" onchange="updateProgress(this)">
+                        <span class="editable-task" contenteditable="true" onkeydown="checkEnter(event)">Buy groceries</span>
+                    </td>
+                    <td>
+                        <input type="date" class="date-input" value="2024-10-19" onchange="updateDateFilter()">
+                        <button class="delete-btn" onclick="deleteTask(this)"><img src="delete.png" alt="Delete"></button>
+                    </td>
+                </tr>
+                <tr class="task-row">
+                    <td>
+                        <input type="checkbox" class="checkbox" onchange="updateProgress(this)">
+                        <span class="editable-task" contenteditable="true" onkeydown="checkEnter(event)">Call mom</span>
+                    </td>
+                    <td>
+                        <input type="date" class="date-input" value="2024-10-20" onchange="updateDateFilter()">
+                        <button class="delete-btn" onclick="deleteTask(this)"><img src="delete.png" alt="Delete"></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="filter-container">
+            <select id="dateFilter" class="date-filter" onchange="filterByDate()">
+                <option value="">Select Date</option>
+            </select>
+            <div class="progress-bar" id="progressBar">0%<br><span id="taskCount">0/0</span></div>
+        </div>
+
+        <button class="add-task-button" onclick="addNewTask()">Add Task</button>
+    </div>
+
+    <script>
+        function updateProgress(checkbox) {
+            const task = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                task.classList.add('checked-task');
+            } else {
+                task.classList.remove('checked-task');
+            }
+
+            const visibleRows = document.querySelectorAll('#taskList tr[style="display: table-row;"], #taskList tr:not([style])');
+            const totalTasks = visibleRows.length;
+            let completedTasks = 0;
+
+            visibleRows.forEach(row => {
+                const checkbox = row.querySelector('.checkbox');
+                if (checkbox.checked) {
+                    completedTasks++;
+                }
+            });
+
+            const progress = totalTasks > 0 ? Math.floor((completedTasks / totalTasks) * 100) : 0;
+            document.getElementById('progressBar').textContent = progress + '%';
+            document.getElementById('taskCount').textContent = `${completedTasks}/${totalTasks}`;
+        }
+
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addNewTask();
+            }
+        }
+
+        function addNewTask() {
+            const taskList = document.getElementById('taskList');
+            const newRow = document.createElement('tr');
+            newRow.classList.add('task-row');
+            newRow.innerHTML = `
+                <td>
+                    <input type="checkbox" class="checkbox" onchange="updateProgress(this)">
+                    <span class="editable-task" contenteditable="true" onkeydown="checkEnter(event)">New Task</span>
+                </td>
+                <td>
+                    <input type="date" class="date-input" onchange="updateDateFilter()">
+                    <button class="delete-btn" onclick="deleteTask(this)"><img src="delete.png" alt="Delete"></button>
+                </td>
+            `;
+            taskList.appendChild(newRow);
+            updateProgress();  
+        }
+
+        function deleteTask(button) {
+            const row = button.closest('tr');
+            row.remove();
+            updateProgress();
+            updateDateFilter();
+        }
+
+        function filterByDate() {
+            const selectedDate = document.getElementById('dateFilter').value;
+            const rows = document.querySelectorAll('#taskList tr');
+            rows.forEach(row => {
+                const dateInput = row.querySelector('.date-input').value;
+                row.style.display = (selectedDate && dateInput !== selectedDate) ? 'none' : 'table-row';
+            });
+
+            updateProgress();
+        }
+
+        function updateDateFilter() {
+            const dateFilter = document.getElementById('dateFilter');
+            dateFilter.innerHTML = '<option value="">Select Date</option>';
+
+            const rows = document.querySelectorAll('#taskList tr');
+            const uniqueDates = new Set();
+
+            rows.forEach(row => {
+                const dateInput = row.querySelector('.date-input').value;
+                if (dateInput) {
+                    uniqueDates.add(dateInput);
+                }
+            });
+
+            uniqueDates.forEach(date => {
+                const option = document.createElement('option');
+                option.value = date;
+                option.textContent = date;
+                dateFilter.appendChild(option);
+            });
+
+            updateProgress();
+        }
+
+        updateProgress();
+        updateDateFilter();
+    </script>
+
+</body>
+</html>

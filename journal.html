@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Gird - Journal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: radial-gradient(circle, black 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Helvetica', sans-serif;
+        }
+        .journal-page {
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .floating-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .floating-icons i {
+            margin: 10px;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+        }
+        .floating-icons i:hover {
+            color: #333;
+        }
+        .date-field {
+            margin-bottom: 20px;
+        }
+        .stars {
+            display: inline-block;
+        }
+        .star {
+            font-size: 30px;
+            cursor: pointer;
+            color: #ccc;
+        }
+        .star.selected {
+            color: #FFD700;
+        }
+        .diary-entry {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 96%;
+            height: 70vh; /* Full page for content */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            color: #272525;
+            background-color: #c0c6bf;
+        }
+        .dear-diary-label {
+            font-style: italic;
+            margin-bottom: 20px; /* Line space between label and content */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="journal-page">
+        <div class="date-field">
+            <label for="entry-date">Date:</label>
+            <input type="date" id="entry-date" name="entry-date">
+        </div>
+
+        <div class="rating-section">
+            <label for="rating">How was your day?</label>
+            <div class="stars">
+                <span class="star" data-value="1">&#9734;</span>
+                <span class="star" data-value="2">&#9734;</span>
+                <span class="star" data-value="3">&#9734;</span>
+                <span class="star" data-value="4">&#9734;</span>
+                <span class="star" data-value="5">&#9734;</span>
+            </div>
+        </div>
+
+        <div class="diary-entry">
+            <label for="diary-text" class="dear-diary-label">Dear Diary:</label>
+            <br>
+            <textarea id="diary-text" placeholder="Write your thoughts here..."></textarea>
+        </div>
+    </div>
+
+    <div class="floating-icons">
+        <i class="fas fa-save" id="save-button"></i>
+        <i class="fas fa-trash-alt" id="delete-button"></i>
+        <i class="fas fa-plus-circle" id="new-button"></i>
+        <i class="fas fa-book" id="load-button" title="Load Saved Entries"></i> <!-- Load button for saved journals -->
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const saveButton = document.getElementById('save-button');
+        const deleteButton = document.getElementById('delete-button');
+        const newButton = document.getElementById('new-button');
+        const loadButton = document.getElementById('load-button');
+        const diaryText = document.getElementById('diary-text');
+        const entryDate = document.getElementById('entry-date');
+
+        // Star Rating System
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.add('selected');
+                    } else {
+                        s.classList.remove('selected');
+                    }
+                });
+            });
+        });
+
+        // Save Journal Entry (mock implementation for now)
+        saveButton.addEventListener('click', () => {
+            const journalEntry = {
+                date: entryDate.value,
+                rating: document.querySelectorAll('.star.selected').length,
+                text: diaryText.value
+            };
+            let savedJournals = JSON.parse(localStorage.getItem('savedJournals')) || [];
+            savedJournals.push(journalEntry);
+            localStorage.setItem('savedJournals', JSON.stringify(savedJournals));
+            alert('Journal entry saved!');
+        });
+
+        // Delete Journal Entry (clear the text and rating)
+        deleteButton.addEventListener('click', () => {
+            diaryText.value = '';
+            entryDate.value = '';
+            stars.forEach(star => star.classList.remove('selected'));
+            alert('Journal entry deleted!');
+        });
+
+        // New Journal Entry (clear fields for new entry)
+        newButton.addEventListener('click', () => {
+            diaryText.value = '';
+            entryDate.value = '';
+            stars.forEach(star => star.classList.remove('selected'));
+            alert('Ready to start a new entry!');
+        });
+
+        // Load Saved Journals
+        loadButton.addEventListener('click', () => {
+            const savedJournals = JSON.parse(localStorage.getItem('savedJournals')) || [];
+            if (savedJournals.length > 0) {
+                const lastEntry = savedJournals[savedJournals.length - 1]; // Load last entry for simplicity
+                entryDate.value = lastEntry.date;
+                diaryText.value = lastEntry.text;
+                stars.forEach((star, index) => {
+                    if (index < lastEntry.rating) {
+                        star.classList.add('selected');
+                    } else {
+                        star.classList.remove('selected');
+                    }
+                });
+                alert('Last saved journal entry loaded!');
+            } else {
+                alert('No saved journal entries found.');
+            }
+        });
+    </script>
+
+</body>
+</html>

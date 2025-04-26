@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindGrid - Sign In</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: auto;
+            position: relative;
+            overflow: auto;
+            background-image: radial-gradient(#494949 1px, transparent 1px), radial-gradient(#ccc 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            padding-top: 80px; /* Space for header */
+        }
+        /* Header Flexbox Container */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 5px;
+            width: 100%;
+        }
+
+        /* Back Button Styling */
+        .back-button {
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            background-color: black;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: -20px;
+        }
+
+        .back-button:hover {
+            background-color: #B8860B; /* Hover color */
+        }
+
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #292421;
+            cursor: pointer;
+            margin-top: -20px;
+        }
+
+        .logo:hover {
+            color: #B8860B;
+        }
+
+        /* Floating Icons in the Background */
+        .floating-icons-bg img {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            opacity: 0.5;
+            animation: float 10s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .floating-icons-bg img:nth-child(1) {
+            top: 20%;
+            left: 3%;
+            animation-delay: 0s;
+        }
+
+        .floating-icons-bg img:nth-child(2) {
+            top: 5%;
+            right: 2%;
+            animation-delay: 1s;
+        }
+
+        .floating-icons-bg img:nth-child(3) {
+            top: 10%;
+            left: 20%;
+            animation-delay: 2s;
+        }
+
+        .floating-icons-bg img:nth-child(4) {
+            bottom: 10%;
+            right: 2%;
+            animation-delay: 3s;
+        }
+
+        .floating-icons-bg img:nth-child(5) {
+            bottom: 5%;
+            left: 3%;
+            animation-delay: 4s;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Container Styling */
+        .container {
+            display: flex;
+            flex-direction: row;
+            width: 80%;
+            max-width: 1000px;
+            height: auto;
+            background-color: #f9f6f6;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(221, 144, 144, 0.2);
+            overflow: auto;
+            position: relative;
+            z-index: 10;
+            margin-top: 50px; /* Space for header */
+        }
+
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, #3d3e3e, #080808);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 30px;
+        }
+
+        .left-section h2 {
+            margin-bottom: 15px;
+        }
+
+        .left-section p {
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .mindgrid-image {
+            max-width: 300px;
+            margin-top: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            height: 150px;
+            width: 150px;
+        }
+
+        .cloud-divider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 20%;
+            background: url('cloud-shape.png') center center/cover no-repeat;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .right-section {
+            flex: 1;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            position: relative;
+            z-index: 5;
+        }
+
+        form {
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #101010;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(21, 21, 21, 0.8);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #303032;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(75, 85, 99, 0.2);
+        }
+
+        button:hover {
+            background-color: #B8860B; /* Change hover color to #B8860B */
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .switch-link a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .forgot-password a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <button class="back-button" onclick="window.location.href='landingpage.html'">&#8592;</button>
+        <div class="logo" onclick="window.location.href='landingpage.html'">MindGrid</div>
+    </header>
+
+
+    <!-- Floating Icons in Background -->
+    <div class="floating-icons-bg">
+        <img src="https://img.icons8.com/?size=160&id=6MP1kA74ozKg&format=png" alt="Productivity Icon">
+        <img src="https://img.icons8.com/?size=96&id=rICG7IedifZA&format=png" alt="Yoga">
+        <img src="https://img.icons8.com/?size=160&id=DzVh6MRkAbVz&format=png" alt="Calendar Icon">
+        <img src="https://img.icons8.com/?size=128&id=43202&format=png" alt="To-do">
+        <img src="https://img.icons8.com/?size=160&id=118563&format=png" alt="Timer">
+    </div>
+
+    <div class="container">
+        <div class="left-section">
+            <h2>Welcome Back to MindGrid</h2>
+            <p>Log in to stay focused, track your progress, and reach your goals with MindGrid. Let's keep your productivity flowing.</p>
+            <img class="mindgrid-image" src="https://png.pngtree.com/png-clipart/20200701/original/pngtree-illustration-of-a-man-working-on-a-laptop-png-image_5361915.jpg" alt="MindGrid Illustration">
+        </div>
+
+        <div class="right-section">
+            <form id="signInForm" method="POST" action="signin.php">
+                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+            </form>
+            <div class="switch-link">
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </div>
+            <div class="forgot-password">
+                <a href="forgot-password.html">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script to Handle Form Validation & Data -->
+    <script>
+        document.getElementById('signInForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (email && password) {
+                // Example AJAX to check credentials in the database (simplified)
+                fetch('signin.php', {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        'email': email,
+                        'password': password
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.setItem('user', JSON.stringify(data.user)); // Store user details in local storage
+                        window.location.href = 'homepage.html'; // Redirect to homepage
+                    } else {
+                        alert('Invalid credentials, please try again.');
+                    }
+                })
+                .catch(error => alert('Error: ' + error));
+            } else {
+                alert('Please fill in both fields.');
+            }
+        });
+    </script>
+
+</body>
+</html>

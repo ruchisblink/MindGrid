@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindGrid - Welcome</title>
+    <!-- Link to Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Link to Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+            /* Root Variables for Easy Theme Management */
+        :root {    
+            --black: #000000;    
+            --white: #FFFFFF;    
+            --gray-light: #F0F0F0;    
+            --gray-dark: #333333;    
+            --accent-color: #B8860B; /* Dark Goldenrod for highlights */    
+            --font-primary: 'Poppins', sans-serif;    
+            --font-secondary: 'Roboto', sans-serif;
+        }
+
+        body {    
+            margin: 0;    
+            padding: 0;    
+            font-family: var(--font-primary);    
+            background-color: var(--gray-dark);    
+            background-image: radial-gradient(var(--gray-dark), var(--gray-light) 1px); /* Changed to gray-dark */    
+            background-size: 30px 30px; /* Bigger dots */    
+            overflow-x: hidden;    
+            color: var(--gray-dark);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            width: 100%;
+            padding: 20px;
+            background-color: var(--black);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .logo {
+            color: var(--white);
+            font-size: 1.8em;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .navbar .nav-links a {
+            color: var(--white);
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--gray-dark);
+            color: var(--white);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .dropdown-menu div {
+            padding: 10px 15px;
+            font-size: 0.9em;
+        }
+
+        .dropdown-menu button {
+            color: var(--white);
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            text-align: left;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .user-menu:hover .dropdown-menu {
+            display: block;
+        }
+
+
+        /* Header Section */
+        .header {    
+            width: 100%;    
+            height: 80vh;    
+            display: flex;    
+            flex-direction: column;    
+            justify-content: center;    
+            align-items: center;    
+            text-align: center;    
+            padding-top: 80px; /* To avoid overlap with navbar */    
+            background-color: var(--black);    
+            position: relative;    
+            color: var(--white);
+        }
+
+        .header h1 {    
+            font-size: 4.5em;    
+            color: var(--white);    
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);    
+            animation: glow 3s infinite alternate;    
+            margin: 0;    
+            font-family: var(--font-secondary);
+        }
+
+        @keyframes glow {    
+            from {        
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);    
+            }    
+            to {        
+                text-shadow: 0 0 25px rgba(255, 255, 255, 1);    
+            }
+        }
+
+        .header p.tagline {    
+            font-size: 2em;    
+            color: var(--white);    
+            margin-top: 20px;    
+            font-weight: 400;    
+            text-transform: capitalize;    
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {    
+            from { opacity: 0; }    
+            to { opacity: 1; }
+        }
+
+        .header hr {    
+            border: 0;    
+            height: 3px;    
+            background-color: var(--white);    
+            width: 80%;    
+            margin: 30px 0;    
+            opacity: 0.7;    
+            border-radius: 2px;
+        }
+
+        /* Main Container */
+        .container {    
+            display: grid;    
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));    
+            gap: 40px;    
+            padding: 40px 20px;    
+            max-width: 1200px;    
+            margin: 0 auto;    
+            margin-top: 120px; /* To avoid overlap with navbar and header */
+        }
+
+        /* Create Space Section */
+        .create-space {    
+            background-color: var(--white);    
+            padding: 30px;    
+            border-radius: 10px;    
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);    
+            text-align: center;    
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .create-space:hover {    
+            transform: translateY(-5px);    
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+
+        .create-space button {    
+            background-color: var(--black);    
+            color: var(--white);    
+            padding: 15px 30px;    
+            border: none;    
+            border-radius: 30px;    
+            cursor: pointer;    
+            font-size: 1.1em;    
+            transition: background-color 0.3s, transform 0.3s;    
+            margin-bottom: 20px;
+        }
+
+        .create-space button:hover {    
+            background-color: var(--accent-color);    
+            transform: scale(1.05);
+        }
+
+        .existing-space {    
+            font-size: 1.1em;    
+            color: var(--black);    
+            max-height: 200px;    
+            overflow-y: auto;    
+            background-color: #a9a9a5; /* Adjusted background color */    
+            padding: 15px;    
+            border-radius: 8px;    
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        .space-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .space-name {
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .space-name:hover {
+            color: var(--accent-color);
+        }
+
+        .button-container {
+            display: none; /* Initially hidden */
+            gap: 10px;
+        }
+
+        .button-container .icon-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 2px 4px; /* Smaller padding */
+            font-size: 0.8em; /* Smaller font size */
+            transition: transform 0.2s, color 0.3s;
+        }
+
+        .icon-button:hover {
+            transform: scale(1.1); /* Slightly larger on hover */
+            color: var(--accent-color);
+        }
+
+        /* Notepad Section */
+        .note-container {    
+            background-color: var(--white);    
+            border: 2px solid var(--black);    
+            padding: 20px;    
+            width: 100%;    
+            height: 300px;    
+            font-family: 'Roboto', sans-serif;    
+            line-height: 1.6;    
+            overflow-y: auto;    
+            background-image: linear-gradient(to bottom, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%);    
+            background-size: 100% 30px; /* Lines spacing */    
+            box-sizing: border-box;    
+            border-radius: 10px;    
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);    
+            position: relative;
+        }
+
+        .note-container h3 {    
+            color: var(--black);    
+            margin-top: 0;    
+            font-family: var(--font-secondary);
+        }
+
+        /* Floating Icons */
+        .floating-icons, .floating-icons-right, .floating-icons-center {    
+            position: fixed;    
+            z-index: 1000;
+        }
+
+        .floating-icons {    
+            top: 100px;    
+            left: 20px;    
+            display: flex;    
+            flex-direction: column;    
+            gap: 15px;
+        }
+
+        .floating-icons-right {    
+            bottom: 20px;    
+            right: 20px;    
+            display: flex;    
+            flex-direction: column;    
+            gap: 15px;
+        }
+
+        .floating-icons-center {    
+            top: 50%;    
+            left: 50%;    
+            transform: translate(-50%, -50%);    
+            display: flex;    
+            flex-direction: column;    
+            gap: 15px;
+        }
+
+        .floating-icons img, .floating-icons-right img, .floating-icons-center img {    
+            width: 40px;    
+            cursor: pointer;    
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .floating-icons img:hover, .floating-icons-right img:hover, .floating-icons-center img:hover {    
+            transform: scale(1.2);    
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Animations for Floating Icons */
+        @keyframes float {    
+            0% { transform: translateY(0px) rotate(0deg); }    
+            50% { transform: translateY(-20px) rotate(10deg); }    
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .floating-icons img, .floating-icons-right img, .floating-icons-center img {    
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-icons img:nth-child(1) {    
+            animation-delay: 0s;
+        }
+
+        .floating-icons img:nth-child(2) {    
+            animation-delay: 1s;
+        }
+
+        .floating-icons img:nth-child(3) {    
+            animation-delay: 2s;
+        }
+
+        .floating-icons-right img:nth-child(1) {    
+            animation-delay: 0.5s;
+        }
+
+        .floating-icons-right img:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        .floating-icons-center img:nth-child(1) {
+            animation-delay: 1s;
+        }
+
+        .floating-icons-center img:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            padding: 20px;
+            background-color: var(--black);
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            bottom: 0;
+        }
+
+        .footer a {
+            color: var(--white);
+            text-decoration: underline;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .floating-icons-center {
+                display: none; /* Hide center icons on smaller screens */
+            }
+
+            .header h1 {
+                font-size: 3em;
+            }
+
+            .header p.tagline {
+                font-size: 1.5em;
+            }
+
+            .container {
+                padding: 20px 10px;
+                gap: 20px;
+            }
+
+            .floating-icons, .floating-icons-right {
+                gap: 10px;
+            }
+
+            .floating-icons img, .floating-icons-right img, .floating-icons-center img {
+                width: 30px;
+            }
+
+            .create-space, .note-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="logo">MindGrid</a>
+        <!-- User Menu -->
+        <div class="user-menu">
+            <img src="user-icon.png" alt="User Icon" class="user-icon">
+            <div class="dropdown-menu">
+                <div>Username: [User]</div>
+                <div>Email: user@example.com</div>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Icon and Profile/Logout Menu -->
+    <div class="user-menu">
+        <img src="https://img.icons8.com/fluency-systems-filled/50/FFFFFF/user.png" alt="User Icon" class="user-icon">
+        <div class="dropdown-menu">
+            <button onclick="openProfile()">Profile</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <h1>Welcome to MindGrid</h1>
+        <p class="tagline">Stay sharp, stay productive.</p>
+        <hr>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="container">
+        <div class="content-wrapper">
+            <!-- 1/3 Padding Area -->
+            <section class="welcome-section">
+                <p>Welcome to MindGrid! Your personal productivity workspace.</p>
+            </section>
+
+            <!-- 2/3 Create Space and Existing Spaces Section -->
+            <section class="create-space">
+                <button id="createSpaceBtn">Create Your Space</button>
+                <div id="inputBox" class="input-box">
+                    <input type="text" placeholder="Enter space name" id="spaceInput">
+                    <button onclick="saveSpace()">Save</button>
+                </div>
+                <div class="existing-space" id="existingSpaces">
+                    <p>No spaces created yet.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Notepad Section -->
+        <section class="note-container">
+            <h3>Why are Productivity Apps Important?</h3>
+            <p>Productivity apps help streamline your tasks, manage your time effectively, and provide structure in a busy world. They help reduce overwhelm and bring clarity to your daily goals.</p>
+            <p>MindGrid combines these benefits with a minimalist, mindful interface, ensuring you stay productive and focused without distraction.</p>
+        </section>
+    </main>
+
+    <!-- Floating Productivity Icons -->
+    <div class="floating-icons">
+        <img src="https://img.icons8.com/?size=100&id=pveqv8YdrRFk&format=png&color=000000" alt="Clock" title="Pomodoro Timer">
+        <img src="https://img.icons8.com/?size=100&id=FFYl1ZRkLos5&format=png&color=000000" alt="Clock" title="Pomodoro Timer">
+        <img src="https://img.icons8.com/?size=100&id=xsmDI5Qkj3wH&format=png&color=000000" alt="Notebook" title="Journal">
+        <img src="https://img.icons8.com/?size=100&id=NSPke6ZZuJny&format=png&color=000000" alt="Checkmark" title="To-Do List">
+        <img src="https://img.icons8.com/?size=100&id=wI5oV8wCkIXd&format=png&color=000000" alt="Notebook" title="Journal">
+    </div>
+
+    <div class="floating-icons-right">
+        <img src="https://i.pinimg.com/564x/2d/5a/65/2d5a65b32ea0df47cc9993b9d536680f.jpg" alt="Calendar" title="Habit Tracker">
+        <img src="https://img.icons8.com/?size=100&id=yPOmsyTBqLwy&format=png&color=000000" alt="Goal" title="Goals">
+        <img src="https://img.icons8.com/?size=100&id=8JxmHi2ZBfXs&format=png&color=000000" alt="Meditation" title="Meditation">
+        <img src="https://img.icons8.com/?size=100&id=FLL4XtbJ9XY2&format=png&color=000000" alt="Heart" title="Well-being">
+        <img src="https://img.icons8.com/?size=100&id=pveqv8YdrRFk&format=png&color=000000" alt="Heart" title="Well-being">
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 MindGrid. All rights reserved.</p>
+        <p>
+            <a href="#terms">Terms of Service</a> |
+            <a href="#privacy">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <!-- JavaScript for Dynamic Space Creation and User Functions -->
+    <script>
+        const createSpaceBtn = document.getElementById('createSpaceBtn');
+        const existingSpacesDiv = document.getElementById('existingSpaces');
+        const inputBox = document.getElementById('inputBox');
+
+        // Load existing spaces from LocalStorage or database
+        let spaces = JSON.parse(localStorage.getItem('spaces')) || [];
+
+        function renderSpaces() {
+            existingSpacesDiv.innerHTML = '';
+            if (spaces.length === 0) {
+                existingSpacesDiv.innerHTML = '<p>No spaces created yet.</p>';
+                return;
+            }
+
+            spaces.forEach((space, index) => {
+                const spaceDiv = document.createElement('div');
+                spaceDiv.className = 'space-item';
+
+                const spaceName = document.createElement('span');
+                spaceName.textContent = space;
+                spaceName.className = 'space-name';
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'button-container';
+                buttonContainer.style.display = 'none';
+
+                const editButton = document.createElement('button');
+                editButton.innerHTML = '<i class="fas fa-edit"></i>';
+                editButton.className = 'icon-button rename-btn';
+                editButton.onclick = (event) => {
+                    event.stopPropagation();
+                    renameSpace(index);
+                };
+
+                const deleteButton = document.createElement('button');
+                deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                deleteButton.className = 'icon-button delete-btn';
+                deleteButton.onclick = (event) => {
+                    event.stopPropagation();
+                    deleteSpace(index);
+                };
+
+                buttonContainer.appendChild(editButton);
+                buttonContainer.appendChild(deleteButton);
+                spaceDiv.appendChild(spaceName);
+                spaceDiv.appendChild(buttonContainer);
+                existingSpacesDiv.appendChild(spaceDiv);
+
+                spaceName.addEventListener('click', () => {
+                    buttonContainer.style.display = buttonContainer.style.display === 'none' ? 'flex' : 'none';
+                });
+
+                spaceName.addEventListener('dblclick', () => {
+                    localStorage.setItem('currentSpace', space);
+                    window.location.href = 'dashboard.html';
+                });
+            });
+        }
+
+        createSpaceBtn.addEventListener('click', () => {
+            inputBox.style.display = 'block';
+        });
+
+        function saveSpace() {
+            const spaceName = document.getElementById('spaceInput').value.trim();
+            if (spaceName && !spaces.includes(spaceName)) {
+                spaces.push(spaceName);
+                localStorage.setItem('spaces', JSON.stringify(spaces));
+                renderSpaces();
+            }
+            inputBox.style.display = 'none';
+        }
+
+        function renameSpace(index) {
+            const newName = prompt('Enter the new name for the space:', spaces[index]);
+            if (newName && newName.trim()) {
+                spaces[index] = newName.trim();
+                localStorage.setItem('spaces', JSON.stringify(spaces));
+                renderSpaces();
+            }
+        }
+
+        function deleteSpace(index) {
+            if (confirm('Are you sure you want to delete this space?')) {
+                spaces.splice(index, 1);
+                localStorage.setItem('spaces', JSON.stringify(spaces));
+                renderSpaces();
+            }
+        }
+
+        function logout() {
+            fetch('/save-user-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userSpaces: spaces })
+            })
+            .then(() => {
+                localStorage.clear();
+                window.location.href = 'signin.html';
+            })
+            .catch(error => console.error('Error saving data:', error));
+        }
+
+        renderSpaces();
+    </script>
+
+</body>
+</html>

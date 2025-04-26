@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindGrid - Dashboard</title>
+    <!-- Link to Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Link to Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Add black margin */
+        body {
+            margin: 30px;
+            background-color: #fff;
+            border: 5px solid black;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Header Section */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid black;
+            position: relative;
+            width: 97%;    
+            height: 3vh;    
+            display: flex;    
+            flex-direction: column;    
+            justify-content: center;    
+            align-items: center;    
+            text-align: center;    
+            padding-top: 80px; /* To avoid overlap with navbar */    
+            background-color: var(--black);    
+            position: relative;    
+            color: var(--white);   
+            margin-bottom: 20px;
+
+        }
+
+        /* Position MindGrid on the top left */
+        .mindgrid-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            position:absolute;
+            left: 0;
+            margin-bottom: 70px;
+        }
+
+        .space-name {
+            font-size:  3em;    
+            color: var(--white);    
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);    
+            animation: glow 3s infinite alternate;    
+            margin: 0;    
+            font-family:'Roboto', sans-serif;
+            margin-bottom: 50px;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 200px auto 350px;
+            gap: 10px;
+        }
+
+        /* Left Sidebar Toolbox */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+
+        .widget-button {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid black;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .widget-button i {
+            margin-right: 10px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            border: 2px solid black;
+            background-color: #fff;
+            margin-right: 30px;
+        }
+
+        /* Right Sidebar with Mini Calendar */
+        .right-sidebar {
+            padding: 10px;
+            border: 2px solid black;
+            width: 300px;
+            margin-right: 0;
+            display: flex; /* Ensures inner content can be aligned */
+            justify-content: center; /* Centers the calendar horizontally */
+            align-items: center; /* Centers the calendar vertically */
+            height: 300px;  /* Adjusted to match the calendar width */
+            margin-left: 0;
+        }
+
+        .mini-calendar iframe {
+        width: 100%; /* Ensures the iframe takes the full width of the sidebar */
+        height: 250px; /* Adjusted height for better visibility */
+        }
+
+        
+
+        /* Floating Productivity Icons (Right only) */
+        .floating-icons-right {
+            position: fixed;
+            right: 10px;
+            top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .floating-icons-right img {
+            cursor: pointer;
+            width: 60px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            border-top: 2px solid black;
+            width: 97%;
+            padding: 20px;
+            background-color: var(--black);
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            
+        }
+        /* Styles for Recently Opened Items in Gallery View */
+        .recent-gallery {
+         display: grid;
+         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive grid */
+        gap: 20px;
+        margin-top: 20px;
+        }  
+        
+        #recentItems {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+        grid-template-rows: repeat(2, auto); /* 2 rows */
+        gap: 10px; /* Space between items */
+}
+
+        .recent-item {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        text-align: center;
+        }
+
+        .recent-item i {
+        font-size: 2em; /* Icon size */
+        margin-bottom: 5px;
+        }
+
+        .recent-item span {
+        margin-top: 10px;
+        font-size: 0.9em;
+        }
+
+        .delete-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        color: rgb(167, 141, 74);
+        cursor: pointer;
+        }
+
+        .delete-button i {
+        font-size: 1.2em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+     
+    <body>
+        <header class="dashboard-header">
+            <h1 class="mindgrid-title">MindGrid</h1>
+            <h2 class="space-name" id="dashboard-space-name">Your Space Title Here</h2> <!-- Always display this -->
+        </header>
+    
+        <div class="dashboard-layout">
+            <!-- Your existing layout code -->
+        </div>
+    </body>
+    
+    <!-- Dashboard Layout -->
+    <div class="dashboard-layout">
+        <!-- Left Sidebar Toolbox -->
+        <aside class="sidebar">
+            <button class="widget-button" onclick="openWidget('pomodoro')">
+                <i class="fas fa-clock"></i> Pomodoro Timer
+            </button>
+            <button class="widget-button" onclick="openWidget('todo')">
+                <i class="fas fa-check"></i> To-Do List
+            </button>
+            <button class="widget-button" onclick="openWidget('notes')">
+                <i class="fas fa-sticky-note"></i> Notes
+            </button>
+            <button class="widget-button" onclick="openWidget('habit')">
+                <i class="fas fa-heartbeat"></i> Habit Tracker
+            </button>
+            <button class="widget-button" onclick="openWidget('journal')">
+                <i class="fas fa-book"></i> Journal
+            </button>
+            <button class="widget-button" onclick="openWidget('sticky')">
+                <i class="fas fa-thumbtack"></i> Sticky Notes
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <h2>Recently Opened Items</h2>
+            <div class="recent-items" id="recentItems">
+                <!-- Recently opened items will appear here -->
+                <p>No recent items.</p>
+            </div>
+        </main>
+
+        <!-- Right Sidebar with Mini Calendar -->
+        <aside class="right-sidebar">
+            <div class="mini-calendar">
+                <h3>Calendar</h3>
+                <div id="calendar">
+                    <iframe src="https://calendar.google.com/calendar/embed?mode=MONTH&showTitle=0&showPrint=0&showTabs=0" style="border: 0" width="250" height="200" frameborder="0" scrolling="no"></iframe>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Floating Productivity Icons (Right only) -->
+    <div class="floating-icons-right">
+        <img src="https://img.icons8.com/?size=100&id=FFYl1ZRkLos5&format=png&color=000000" alt="Clock" title="Pomodoro Timer">
+        <img src="https://img.icons8.com/?size=100&id=8JxmHi2ZBfXs&format=png&color=000000" alt="Meditation" title="Meditation">
+        <img src="https://img.icons8.com/?size=100&id=wI5oV8wCkIXd&format=png&color=000000" alt="Notebook" title="Journal">
+    </div>
+
+    <div id="recentItems" class="recent-gallery">
+        <!-- Recently opened items will be dynamically added here in a gallery view -->
+    </div>
+    
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 MindGrid. All rights reserved.</p>
+        <p>
+            <a href="#terms">Terms of Service</a> |
+            <a href="#privacy">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <!-- JavaScript for Dashboard Functionality -->
+    <script>
+        window.onload = function() {
+    // Always set the space title here
+    const currentSpace = localStorage.getItem('currentSpace');
+    document.getElementById('dashboard-space-name').innerText = currentSpace ? currentSpace : 'No Space Selected';
+    
+    // Render Recently Opened Items
+    renderRecentItems();
+};
+
+// Function to open widgets and redirect to respective page
+function openWidget(widgetName) {
+    alert(`Opening ${capitalizeFirstLetter(widgetName)}...`);
+    addToRecent(widgetName);
+    window.location.href = `${widgetName}.html`; // Redirect to the widget page
+    // Do not modify the space title, it should remain constant
+}
+
+
+// Function to add items to recently opened list
+function addToRecent(widgetName) {
+    let recent = JSON.parse(localStorage.getItem('recent')) || [];
+    // Remove the item if it's already in the recent list, then re-add to the top
+    recent = recent.filter(item => item !== widgetName);
+    recent.unshift(widgetName);
+    if (recent.length > 5) recent.pop(); // Limit to 5 recent items
+    localStorage.setItem('recent', JSON.stringify(recent));
+    renderRecentItems(); // Refresh the recently opened items list
+}
+
+// Function to render recently opened items in a gallery view
+function renderRecentItems() {
+    const recentItemsDiv = document.getElementById('recentItems');
+    const recent = JSON.parse(localStorage.getItem('recent')) || [];
+    recentItemsDiv.innerHTML = ''; // Clear the container
+
+    if (recent.length === 0) {
+        recentItemsDiv.innerHTML = '<p>No recent items.</p>';
+        return;
+    }
+
+    recent.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'recent-item';
+        itemDiv.innerHTML = `
+            <i class="fas fa-${getIconName(item)}"></i>
+            <span>${capitalizeFirstLetter(item)}</span>
+            <button class="delete-button" onclick="removeFromRecent(${index})">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        `;
+        recentItemsDiv.appendChild(itemDiv);
+    });
+}
+
+// Function to remove an item from recently opened list
+function removeFromRecent(index) {
+    let recent = JSON.parse(localStorage.getItem('recent')) || [];
+    recent.splice(index, 1); // Remove item by index
+    localStorage.setItem('recent', JSON.stringify(recent));
+    renderRecentItems(); // Re-render the list
+}
+
+// Helper function: Capitalize the first letter of a string
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Helper function: Get the icon name for each widget
+function getIconName(widgetName) {
+    switch(widgetName) {
+        case 'pomodoro': return 'clock';
+        case 'todo': return 'check';
+        case 'notes': return 'sticky-note';
+        case 'habit': return 'heartbeat';
+        case 'journal': return 'book';
+        case 'sticky': return 'thumbtack';
+        default: return 'circle';
+    }
+}
+
+    </script>
+    
+    
+
+</body>

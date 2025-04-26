@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: radial-gradient(#494949 1px, transparent 1px), radial-gradient(#ccc 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Container Styling */
+        .pomodoro-container {
+            text-align: center;
+            background-color: #303030;
+            border-radius: 15px;
+            padding: 50px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            width: 83%;
+            max-width: 600px;
+            position: relative;
+            z-index: 8;
+        }
+
+        /* Timer Display */
+        .timer {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: glowing 2s infinite alternate;
+        }
+
+        /* Glowing Effect Animation */
+        @keyframes glowing {
+            0% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 60px rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        /* Control Buttons */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .controls button {
+            background-color: #fad8d8;
+            color: #151514;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .controls button:hover {
+            background-color: #fafafa;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Input Fields for Custom Time */
+        .time-settings {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .time-settings label, .time-settings input {
+            font-size: 16px;
+        }
+
+        .time-settings input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #121212;
+            text-align: center;
+        }
+
+        /* Floating Icons Styling */
+        .floating-icons-bg img {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            opacity: 3;
+            animation: float 10s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .floating-icons-bg img:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-icons-bg img:nth-child(2) {
+            top: 3%;
+            right: 10%;
+            animation-delay: 1.5s;
+        }
+
+        .floating-icons-bg img:nth-child(3) {
+            bottom: 15%;
+            left: 5%;
+            animation-delay: 3s;
+        }
+
+        .floating-icons-bg img:nth-child(4) {
+            bottom: 19%;
+            right: 8%;
+            animation-delay: 4.5s;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Icons in Background -->
+    <div class="floating-icons-bg">
+        <img src="https://img.icons8.com/?size=160&id=6MP1kA74ozKg&format=png" alt="Productivity Icon">
+        <img src="https://img.icons8.com/?size=96&id=rICG7IedifZA&format=png" alt="Yoga">
+        <img src="https://img.icons8.com/?size=160&id=DzVh6MRkAbVz&format=png" alt="Calendar Icon">
+        <img src="https://img.icons8.com/?size=128&id=43202&format=png" alt="To-do">
+    </div>
+
+    <div class="pomodoro-container">
+        <h2>Pomodoro Timer</h2>
+        <div class="time-settings">
+            <label for="pomodoro-time">Pomodoro (min):</label>
+            <input type="number" id="pomodoro-time" value="25" min="1">
+            <label for="break-time">Break (min):</label>
+            <input type="number" id="break-time" value="5" min="1">
+        </div>
+        <div class="timer" id="timer">25:00</div>
+        <div class="controls">
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let timerDisplay = document.getElementById("timer");
+        let startButton = document.getElementById("start");
+        let pauseButton = document.getElementById("pause");
+        let resetButton = document.getElementById("reset");
+        let pomodoroInput = document.getElementById("pomodoro-time");
+        let breakInput = document.getElementById("break-time");
+
+        let countdown;
+        let isPaused = false;
+        let isBreak = false;
+        let remainingTime;
+
+        function updateTimerDisplay(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function startTimer() {
+            if (isPaused) {
+                isPaused = false;
+                return;
+            }
+            clearInterval(countdown);
+            let totalTime = isBreak ? parseInt(breakInput.value) * 60 : parseInt(pomodoroInput.value) * 60;
+            remainingTime = totalTime;
+            countdown = setInterval(() => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    updateTimerDisplay(remainingTime);
+                } else {
+                    clearInterval(countdown);
+                    alert(isBreak ? "Break is over!" : "Pomodoro session completed!");
+                    isBreak = !isBreak;
+                    startTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isPaused = true;
+            clearInterval(countdown);
+        }
+
+        function resetTimer() {
+            clearInterval(countdown);
+            isBreak = false;
+            isPaused = false;
+            updateTimerDisplay(parseInt(pomodoroInput.value) * 60);
+        }
+
+        startButton.addEventListener("click", startTimer);
+        pauseButton.addEventListener("click", pauseTimer);
+        resetButton.addEventListener("click", resetTimer);
+
+        resetTimer();
+    </script>
+</body>
+</html>

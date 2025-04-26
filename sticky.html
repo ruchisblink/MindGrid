@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(#000 1px, transparent 1px);
+            background-size: 10px 10px;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .note-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sticky-note {
+            width: 300px;
+            height: 350px;
+            padding: 10px;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 8px;
+            position: relative;
+            resize: both;
+            overflow: auto;
+        }
+
+        .sticky-note textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            resize: none;
+        }
+
+        .add-button {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border: 2px solid black;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .sticky-note:hover .delete-btn {
+            display: block;
+        }
+
+        .delete-btn i {
+            color: red;
+            font-size: 18px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Sticky Notes</h1>
+        <div id="noteContainer" class="note-container">
+            <!-- Sticky notes will be added here -->
+        </div>
+        <button class="add-button" id="addButton">+ Add</button>
+    </div>
+
+    <script>
+        const noteContainer = document.getElementById('noteContainer');
+        const addButton = document.getElementById('addButton');
+
+        function createStickyNote() {
+            // Create the sticky note div
+            const stickyNote = document.createElement('div');
+            stickyNote.className = 'sticky-note';
+
+            // Create the delete button with trash can icon
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.onclick = function () {
+                noteContainer.removeChild(stickyNote);
+                positionAddButton();
+            };
+            stickyNote.appendChild(deleteBtn);
+
+            // Create the textarea for note input
+            const textarea = document.createElement('textarea');
+            textarea.placeholder = 'Enter your note here...';
+            stickyNote.appendChild(textarea);
+
+            // Append the sticky note to the container
+            noteContainer.appendChild(stickyNote);
+
+            positionAddButton();
+        }
+
+        function positionAddButton() {
+            const stickyNotes = document.querySelectorAll('.sticky-note');
+            const totalNotes = stickyNotes.length;
+
+            // Show only 3 sticky notes per row
+            const columns = 3;
+            const rows = Math.ceil(totalNotes / columns);
+
+            if (totalNotes % 3 === 0) {
+                noteContainer.appendChild(addButton); // Move the add button to a new row after 3rd sticky note
+            } else {
+                noteContainer.appendChild(addButton); // Keep the add button beside the last sticky note
+            }
+        }
+
+        addButton.addEventListener('click', createStickyNote);
+
+    </script>
+
+</body>
+</html>

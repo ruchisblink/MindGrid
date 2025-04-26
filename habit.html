@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Grid - Habit Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background: radial-gradient(circle, black 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .habit-tracker-container {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .habit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .habit-header h2 {
+            margin: 0;
+        }
+        .calendar-container {
+            margin-top: 20px;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .calendar-day {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        .calendar-day.checked {
+            background-color: yellow;
+        }
+        .habits-list {
+            margin-top: 20px;
+        }
+        .habit {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            align-items: center;
+        }
+        .progress-bar {
+            width: 50%; /* Shortened the width of the progress bar */
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-left: 5px; /* Added space between habit name and progress bar */
+            margin-top: 10px;
+        }
+        .progress-bar-inner {
+            height: 10px;
+            background-color: black;
+            width: 10%;
+        }
+        /* Floating action buttons */
+        .floating-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .floating-icon {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .floating-icon:hover {
+            background-color: #444;
+        }
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .popup-header h3 {
+            margin: 0;
+        }
+        .close-popup {
+            cursor: pointer;
+            color: rgb(236, 58, 58);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="habit-tracker-container">
+        <div class="habit-header">
+            <h2>Habit Tracker</h2>
+        </div>
+
+        <!-- Calendar View -->
+        <div class="calendar-container">
+            <div class="calendar" id="calendar">
+                <!-- Calendar days will be added here dynamically -->
+            </div>
+        </div>
+
+        <!-- Added Habits Section -->
+        <div class="habits-list" id="habits-list">
+            <h3>Added Habits:</h3>
+            <div id="habits-container"></div>
+        </div>
+
+        <!-- Floating action buttons -->
+        <div class="floating-icons">
+            <div class="floating-icon" id="add-habit">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+
+        <!-- Popup for Habit Completion -->
+        <div class="popup" id="popup">
+            <div class="popup-header">
+                <h3>Habit Completion</h3>
+                <span class="close-popup" id="close-popup">&times;</span>
+            </div>
+            <div id="popup-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const calendarContainer = document.getElementById('calendar');
+        const habitsContainer = document.getElementById('habits-container');
+        const popup = document.getElementById('popup');
+        const popupContent = document.getElementById('popup-content');
+        let checkedDays = 0;
+        let totalDays = 31;
+        let habits = [];
+
+        // Create the calendar days dynamically
+        function createCalendar() {
+            for (let day = 1; day <= totalDays; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                dayElement.dataset.day = day;
+
+                // Event listener to open popup with habit status
+                dayElement.addEventListener('click', () => {
+                    openPopup(day);
+                });
+
+                calendarContainer.appendChild(dayElement);
+            }
+        }
+
+        // Open the popup for a specific day
+        function openPopup(day) {
+            popup.style.display = 'block';
+            popupContent.innerHTML = ''; // Clear previous content
+
+            // Create habit checkboxes for each habit
+            habits.forEach((habit, index) => {
+                const habitItem = document.createElement('div');
+                habitItem.className = 'habit';
+                habitItem.innerHTML = `
+                    <label>
+                        <input type="checkbox" id="habit-${index}-${day}" class="habit-checkbox" ${habit.checkedDays.includes(day) ? 'checked' : ''}>
+                        ${habit.name}
+                    </label>
+                `;
+                popupContent.appendChild(habitItem);
+                
+                // Event listener to update habit completion
+                const checkbox = habitItem.querySelector('.habit-checkbox');
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        habit.checkedDays.push(day);
+                        checkedDays++;
+                    } else {
+                        habit.checkedDays = habit.checkedDays.filter(d => d !== day);
+                        checkedDays--;
+                    }
+                    updateProgressBar();
+                    updateIndividualProgress(index);
+                });
+            });
+        }
+
+        // Close the popup
+        document.getElementById('close-popup').addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        // Update the progress bar for the overall habits
+        function updateProgressBar() {
+            const percentage = (checkedDays / (totalDays * habits.length)) * 100;
+            // Overall progress can be handled separately if needed
+        }
+
+        // Update individual habit progress and display
+        function updateIndividualProgress(index) {
+            const habit = habits[index];
+            const completedDays = habit.checkedDays.length;
+            const percentage = (completedDays / totalDays) * 100;
+
+            // Update the progress bar for this specific habit
+            const habitElements = document.querySelectorAll('.habit')[index];
+            const progressBarInner = habitElements.querySelector('.progress-bar-inner');
+            progressBarInner.style.width = percentage + '%';
+        }
+
+        // Add new habit (floating button action)
+        document.getElementById('add-habit').addEventListener('click', () => {
+            const habitName = prompt('Enter a new habit:');
+            if (habitName) {
+                habits.push({ name: habitName, checkedDays: [] });
+                updateHabitsList();
+            }
+        });
+
+        // Update habits list display
+        function updateHabitsList() {
+            habitsContainer.innerHTML = ''; // Clear previous habits
+            habits.forEach((habit, index) => {
+                const habitElement = document.createElement('div');
+                habitElement.className = 'habit';
+                habitElement.innerHTML = `
+                    <div style="flex: 1;">${habit.name}</div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" style="width: 0%;"></div>
+                    </div>
+                    <button class="delete-habit" data-index="${index}" style="background: none; border: none; cursor: pointer;">
+                        <i class="fas fa-trash" style="color: red;"></i>
+                    </button>
+                `;
+                habitsContainer.appendChild(habitElement);
+
+                // Event listener for delete icon
+                habitElement.querySelector('.delete-habit').addEventListener('click', () => {
+                    habits.splice(index, 1); // Remove habit from the list
+                    updateHabitsList(); // Refresh the list
+                });
+            });
+        }
+
+        // Initialize calendar on load
+        window.addEventListener('load', createCalendar);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MindGrid is designed to enhance productivity with features like Pomodoro timer, to-do lists, journaling, and more.">
+    <meta name="keywords" content="MindGrid, productivity, Pomodoro, to-do lists, journaling, focus, time management">
+    <meta name="author" content="MindGrid Team">
+    <title>MindGrid</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth; /* Smooth scrolling */
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            background-image: radial-gradient(rgba(51, 51, 51, 0.5) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 50% 50%;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 30px 80px; /* Increased padding */
+            background-color: #000000; /* Changed navbar color */
+            color: #f8f9fa;
+        }
+
+        .nav-bar .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .nav-bar ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+            color: #f8f9fa;
+            font-size: 1.3rem; /* Increased font size */
+            padding: 12px 20px;
+            border-radius: 25px; /* Rounded edges */
+        }
+
+        .nav-bar a:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .nav-bar .buttons {
+            margin-left: auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-bar button {
+            background-color: #495057;
+            color: #f8f9fa;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px; /* Rounded edges */
+            cursor: pointer;
+        }
+
+        .nav-bar button:hover {
+            background-color: #d3d3d3; /* Changed hover color to grey */
+        }
+
+        .heading {
+            font-size: 7vw;
+            opacity: 0;
+            transform: translateY(-100%);
+            animation: slide-down 1s forwards;
+            text-align: center;
+        }
+
+        .try-it-button {
+            background-color: #495057;
+            color: white;
+            font-size: 2.5vw;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .try-it-button:hover {
+            background-color: #d3d3d3; /* Grey hover effect */
+            color: #000000;
+        }
+
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+
+        .icon {
+            position: absolute;
+            width: 100px; /* Adjust width as needed */
+            height: auto; /* Maintain aspect ratio */
+            animation: float 5s ease-in-out infinite;
+            opacity: 0.9;
+            image-rendering: crisp-edges; /* For sharpness */
+            -webkit-image-rendering: crisp-edges;
+            -moz-image-rendering: crisp-edges;
+            -o-image-rendering: crisp-edges;
+            image-rendering: -moz-crisp-edges; /* Mozilla-specific */
+            image-rendering: -o-crisp-edges;   /* Opera-specific */
+            image-rendering: pixelated;        /* Pixel clarity */
+        }
+
+
+        .about-us {
+            padding: 50px 20px;
+            text-align: left;
+            background-color: #dee2e6;
+            border-radius: 25px; /* Rounded corners */
+            margin: 50px auto;
+            max-width: 1200px; /* Slightly reduced width */
+            width: 90%; /* Responsive width */
+            height: 90%;
+        }
+
+        .about-us h2 {
+            margin-bottom: 15px;
+            font-size: 2rem;
+        }
+
+        .about-us ul {
+            font-size: 1.1rem;
+            line-height: 2;
+        }
+
+        .footer {
+            background-color: #343a40;
+            padding: 20px;
+            text-align: center;
+            color: #f8f9fa;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: #adb5bd;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #f8f9fa;
+        }
+
+        @keyframes slide-down {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Icon positioning */
+        .icon:nth-child(1) { left: 5%; top: 25%; animation-delay: 0s; }
+        .icon:nth-child(2) { right: 10%; top: 15%; animation-delay: 1s; }
+        .icon:nth-child(3) { left: 10%; top: 65%; animation-delay: 2s; }
+        .icon:nth-child(4) { right: 5%; top: 35%; animation-delay: 3s; }
+        .icon:nth-child(5) { left: 25%; top: 75%; animation-delay: 4s; }
+        .icon:nth-child(6) { right: 15%; top: 55%; animation-delay: 5s; }
+
+    </style>
+</head>
+<body>
+    <nav class="nav-bar" aria-label="Main Navigation">
+        <div class="logo">MindGrid</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about-us">About Us</a></li>
+            <li><a href="#contact-us">Contact Us</a></li>
+        </ul>
+        <div class="buttons">
+            <button aria-label="Sign Up" onclick="window.location.href='signup.html'">Sign Up</button>
+            <button aria-label="Login" onclick="window.location.href='signin.html'">Login</button>
+        </div>
+    </nav>
+
+    <div class="container" id="home">
+        <h1 class="heading">MindGrid</h1>
+        <button class="try-it-button" onclick="redirectToSignup()">Try It</button>
+        <div class="floating-icons">
+            <img src="https://img.icons8.com/?size=100&id=80371&format=png&color=000000" alt="Pomodoro Timer" class="icon" />
+            <img src="https://img.icons8.com/?size=100&id=zbKGUoX9KUZR&format=png&color=000000" alt="To-Do List" class="icon" />
+            <img src="https://img.icons8.com/?size=100&id=71733&format=png&color=000000" alt="Journal" class="icon" />
+            <img src="https://img.icons8.com/?size=100&id=qXsepHUeSxh1&format=png&color=000000" alt="Planner" class="icon" />
+            <img src="https://img.icons8.com/?size=100&id=80351&format=png&color=000000" alt="Mindfulness" class="icon" />
+            <img src="https://img.icons8.com/?size=100&id=81747&format=png&color=000000" alt="Well-being" class="icon" />
+        </div>
+        
+    </div>
+
+    <section id="about-us" class="about-us">
+        <h2>✨ About Us</h2>
+        <p>Welcome to MindGrid! Our mission is to provide you with the tools you need to improve your productivity and mental wellness. Whether you're a student, professional, or entrepreneur, MindGrid is designed to help you stay focused, organized, and motivated. Our platform offers a range of features that help you manage your tasks, time, and well-being.</p>
+        <ul class="features">
+            <li>⏰ Pomodoro Timer: Boost your focus with work-rest intervals.</li>
+            <li>📋 To-Do Lists: Stay organized with task management tools.</li>
+            <li>📖 Journaling: Reflect and track your thoughts and progress.</li>
+            <li>📊 Habit Trackers: Build and maintain productive habits.</li>
+        </ul>
+    </section>
+
+    <footer id="contact-us" class="footer">
+        <p>Connect with us:</p>
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Instagram</a>
+    </footer>
+    <button onclick="location.reload();" style="position: fixed; bottom: 20px; right: 20px; background-color: #495057; color: #f8f9fa; border: none; padding: 10px 15px; border-radius: 25px; cursor: pointer;">
+        🔄 Refresh
+    </button>
+
+    <script>
+        function redirectToSignup() {
+            window.location.href = "signup.html"; 
+        }
+    </script>
+</body>
+</html>

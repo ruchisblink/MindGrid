@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #151514;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: radial-gradient(#b89a9a 1px, transparent 1px), radial-gradient(#ccc 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Notes Container Styling */
+        .notes-container {
+            background-color: #f5f4d8;
+            width: 90%;
+            height: 80%;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        /* Spiral Binding Styling */
+        .spiral {
+            width: 20px;
+            background-color: #0d0c0c;
+            height: 100%;
+            position: absolute;
+            left: -10px;
+            top: 0;
+            border-radius: 0 10px 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            padding: 15px 0;
+        }
+
+        .spiral div {
+            width: 10px;
+            height: 10px;
+            background-color: #f0f0c8;
+            border-radius: 50%;
+            margin: 5px 0;
+        }
+
+        /* Notes Content Styling */
+        .notes-content {
+            width: 95%;
+            height: 95%;
+            background-color: transparent;
+            line-height: 28px;
+            font-size: 18px;
+            padding: 0 20px;
+            position: relative;
+            border-left: 5px solid #b95c5c;
+        }
+
+        /* Ruled Lines Styling */
+        .ruled-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 28px,
+                #898585 29px
+            );
+            z-index: 1;
+        }
+
+        .notes-textarea {
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            border: none;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            resize: none;
+            font-size: 18px;
+            line-height: 28px;
+            padding-top: 14px; /* Adjust padding for line alignment */
+        }
+
+        /* Navigation Arrows */
+        .navigation {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+        }
+
+        .navigation button {
+            background-color: #484848;
+            color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .navigation button:hover {
+            background-color: #151514;
+        }
+
+        /* Floating Icons Styling */
+        .floating-icons-bg {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .floating-icons-bg img {
+            width: 40px;
+            height: 40px;
+            opacity: 10;
+            animation: float 10s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Icons in Background -->
+    <div class="floating-icons-bg">
+        <img src="https://img.icons8.com/?size=160&id=6MP1kA74ozKg&format=png" alt="Productivity Icon">
+        <img src="https://img.icons8.com/?size=96&id=rICG7IedifZA&format=png" alt="Yoga">
+        <img src="https://img.icons8.com/?size=160&id=DzVh6MRkAbVz&format=png" alt="Calendar Icon">
+        <img src="https://img.icons8.com/?size=128&id=43202&format=png" alt="To-do">
+    </div>
+
+    <!-- Notes Container -->
+    <div class="notes-container">
+        <div class="spiral">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="ruled-lines"></div>
+        <div class="notes-content">
+            <textarea class="notes-textarea" placeholder="Write your notes here..."></textarea>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="navigation">
+        <button id="prev">⬅ Previous</button>
+        <button id="next">Next ➡</button>
+    </div>
+
+    <script>
+        // Event listeners for navigation buttons
+        document.getElementById("prev").addEventListener("click", () => {
+            alert("Load the previous note");
+            // Implement logic to load the previous note
+        });
+
+        document.getElementById("next").addEventListener("click", () => {
+            alert("Load the next note");
+            // Implement logic to load the next note
+        });
+    </script>
+</body>
+</html>
